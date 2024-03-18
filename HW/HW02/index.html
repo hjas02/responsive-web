@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반응형웹 HTML과제</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="d_Top">
+            <span id="student_id">202127035</span><span id="student_name">주현호</span>
+        </div>
+        <div id="d_Left">
+            <div id="buttons">
+                <button id="button1" onclick="createCanvas()">버튼1</button>
+                <button id="button2" onclick="showText()">버튼2</button>
+            </div>
+        </div>
+        <div id="d_Right">
+            <div id="rightText1">빈 화면</div>
+            <div id="rightText2" style="display: none;">
+                <div class="contents">
+                    <img src="download.jpg" alt="이미지" style="width: 300px;">
+                    <ul>
+                        <li>The Binding of Isaac Rebirth</li>
+                        <li>2014년 11월 5일</li>
+                        <li>액션, 로그라이크, 탑뷰 슈팅</li>
+                        <li>다양한 아이템, 맵, 몬스터가 있어 매 판마다 다양한 플레이가 가능하며 난이도가 높지만 로그라이크 게임 특성상 운만 좋으면 컨트롤이 부족하더라도 재밌게 할수 있다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createCanvas() {
+            var existingCanvas = document.getElementById("myCanvas");
+            if (existingCanvas) {
+                return; // 이미 캔버스가 있으면 더이상 실행하지 않음
+            }
+            var canvas = document.createElement("canvas");
+            canvas.width = 720;
+            canvas.height = 472.5;
+            canvas.style.position = "absolute"; /* 캔버스를 절대 위치로 설정 */
+            canvas.style.top = "0"; /* 상단에 위치 */
+            canvas.style.left = "0"; /* 좌측에 위치 */
+            canvas.id = "myCanvas"; // 캔버스에 ID 추가
+            var context = canvas.getContext("2d");
+            context.beginPath();
+            context.arc(360, 236.25, 200, 0, 2 * Math.PI);
+            context.fillStyle = "white";
+            context.fill();
+            context.strokeStyle = "black"; // 테두리 선 색상 설정
+            context.lineWidth = 2; // 테두리 선 두께 설정
+            context.stroke(); // 원의 테두리를 그림
+            document.getElementById("d_Right").appendChild(canvas);
+            document.getElementById("rightText1").style.display = "none"; // 텍스트 숨기기
+            document.getElementById("rightText2").style.display = "none"; // 텍스트 숨기기
+        }
+        function showText() {
+            var existingCanvas = document.getElementById("myCanvas");
+            if (existingCanvas) {
+                existingCanvas.remove(); // 이미 캔버스가 있으면 삭제
+            }
+            document.getElementById("rightText2").style.display = "block"; // 텍스트 보이기
+            document.getElementById("rightText1").style.display = "none"; // 텍스트 숨기기
+        }
+
+    </script>
+</body>
+</html>

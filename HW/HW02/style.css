@@ -1,0 +1,72 @@
+#container  {
+    width: 960px; /* 가로 폭 설정 */
+    height: 540px; /* 세로 높이 설정 */
+}
+#d_Top {
+    display: flex;
+    background-color: #808080;/*배경색*/
+    width: 960px;
+    height: 67.5px;
+    font-family: serif;/*폰트 종류*/
+    align-items: center; /* 세로로 중앙 정렬 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+}
+#student_id {
+    color: white; /*폰트 색상*/
+    font-size: 30px;/*폰트 크기*/
+}
+#student_name {
+    color: white;/*폰트 색상*/
+    font-size: 30px;/*폰트 크기*/
+}
+#d_Left {
+    float: left;
+    width: 240px; 
+    background-color: skyblue;
+    height: 472.5px;
+    text-align: center;
+}
+#button1{
+    font-family: Arial, Helvetica, sans-serif ; /*폰트 종류*/
+    font-size: 30px; /* 폰트 크기 */
+    color: black; /* 글자 색상 */
+    width: 200px; /* 버튼 너비 설정 */
+    height: 100px; /* 버튼 높이 설정 */
+    background-color: white;/*버튼 색상 변경*/
+}
+#button2{
+    font-family: cursive; /*폰트 종류*/
+    font-size: 28px; /* 폰트 크기 */
+    color: black; /* 글자 색상 */
+    width: 200px; /* 버튼 너비 설정 */
+    height: 100px; /* 버튼 높이 설정 */
+    background-color: white;/*버튼 색상 변경*/
+}
+#buttons{
+    margin: 8px;
+    padding: 8px;
+}
+#d_Right {
+    float: left;
+    width: 720px; 
+    height: 472.5px;
+    background-color: rgb(183, 183, 224);
+    text-align: center;
+    position: relative; /* 상대 위치 설정 */
+    color: black;/* 텍스트 색상 */
+}
+#rightText1 {
+    font-size: 30px; /* 텍스트 폰트 크기 설정 */
+    line-height: 456px; /* 텍스트 수직 정렬 */
+    font-family: cursive; /*폰트 종류*/
+}
+#rightText2 {
+    text-align: center;
+}
+.contents {
+    width: 720px;
+    height: 456px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
