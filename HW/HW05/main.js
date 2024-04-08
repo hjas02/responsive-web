@@ -9,7 +9,7 @@ var rotAngle = 0;
 var rotAngleE = 0;
 var rotAngleE2 = 0;
 var rotAngleM = 0;
-//setInterval(draw, 1000.0/60.0);
+setInterval(draw, 1000.0/60.0);
 
 function draw()
 {
@@ -48,7 +48,7 @@ function draw()
     ctx.fillRect(-20,-20,40,40);
     ctx.restore();
 
-    requestAnimationFrame(draw);
+    //requestAnimationFrame(draw);
 }
 
 // // 다음 프레임 요청(requestAnimationFrame 안쓸때)
