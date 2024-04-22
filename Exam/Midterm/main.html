@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>24 : Reactive: Midterm Game</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        #titleScreen {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .start-button {
+            padding: 15px 30px;
+            background-color: rgb(180, 180, 180);
+            color: white;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: rgb(240, 194, 168);
+        }
+        .start-button:active {
+            background-color: rgb(2, 1, 63); /* 마우스를 가져다 대면 어두운 파란색으로 변경 */
+        }
+
+        #GameScreenCanvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="titleScreen">
+        <h1>게임타이틀</h1>
+        <button class="start-button" onclick="startGame()">시작</button>
+    </div>
+
+    <canvas id="GameScreenCanvas" width="480" height="800">
+    <script src="main.js"></script>
+
+    <script>
+        function startGame() {
+            document.getElementById("titleScreen").style.display = "none";
+            setTimeout(function() {
+                document.getElementById("GameScreenCanvas").style.display = "block";
+                init(); // 게임 시작 로직을 main.js 파일에 작성
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+html {
+    background-color: rgb(72, 153, 242);
+}
+
+#GameScreenCanvas {
+    background-color: rgb(180, 180, 180);
+    margin: 50px auto 0; 
+    display: block; 
+}
