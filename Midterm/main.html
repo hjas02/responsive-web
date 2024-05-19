@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>24 : Reactive: Midterm Game</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        #titleScreen {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .start-button {
+            padding: 15px 30px;
+            background-color: rgb(180, 180, 180);
+            color: white;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: rgb(240, 194, 168);
+        }
+        .start-button:active {
+            background-color: rgb(2, 1, 63); /* 마우스를 가져다 대면 어두운 파란색으로 변경 */
+        }
+
+        .restart-button {
+            padding: 15px 30px;
+            background-color: rgb(180, 180, 180);
+            color: white;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .restart-button:hover {
+            background-color: rgb(240, 194, 168);
+        }
+        .restart-button:active {
+            background-color: rgb(2, 1, 63); /* 마우스를 가져다 대면 어두운 파란색으로 변경 */
+        }
+
+        #GameScreenCanvas {
+            display: none;
+        }
+        #gameOverScreen {
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="titleScreen">
+        <h1>게임타이틀</h1>
+        <button class="start-button" onclick="startGame()">시작</button>
+    </div>
+    <div id="gameOverScreen">
+        <h1>게임 오버</h1>
+        <button class="restart-button" onclick="restartGame()">재시작</button>
+    </div>
+
+    <canvas id="GameScreenCanvas" width="480" height="800">
+    <script src="main.js"></script>
+
+    <script>
+        function startGame() {
+            document.getElementById("titleScreen").style.display = "none";
+            setTimeout(function() {
+                document.getElementById("GameScreenCanvas").style.display = "block";
+                init();
+            }, 1000);
+        }
+        function restartGame() {
+            document.getElementById("gameOverScreen").style.display = "none";
+            document.getElementById("GameScreenCanvas").style.display = "block";
+            resetGame(); 
+        }
+    </script>
+</body>
+</html>
