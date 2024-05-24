@@ -8,18 +8,97 @@ var dy = 0; // y축 이동 속도
 var HP = 3;
 const Enmeys = [];
 var a = 1;
+var t=false;
+var time=0;
+var sX=1;
+var sY=1;
+var count=0;
+var x;
+lists = {
+    "0": [true, true, false, true, true, true, true],
+    "1": [false, true, false, false, false, true, false],
+    "2": [true, true, true, false, true, false, true],
+    "3": [true, true, true, false, false, true, true],
+    "4": [false, true, true, true, false, true, false],
+    "5": [true, false, true, true, false, true, true],
+    "6": [false, false, true, true, true, true, true],
+    "7": [true, true, false, true, false, true, false],
+    "8": [true, true, true, true, true, true, true],
+    "9": [true, true, true, true, false, true, false],
+}
+function drawNum(num)
+{
+    var on = "Black";
+    var off = "#dee2e6";
+    var digitList = lists[num.toString()];
 
+    //상단
+    ctx.beginPath()
+    ctx.strokeStyle = digitList[0] ? on : off;
+    ctx.moveTo(x +10 , 10)
+    ctx.lineTo(x + 60, 10)
+    ctx.stroke();
+    ctx.closePath();
+
+    //상단 우측
+    ctx.beginPath()
+    ctx.strokeStyle = digitList[1] ? on : off;
+    ctx.moveTo(x +60 , 15)
+    ctx.lineTo(x + 60, 60)
+    ctx.stroke();
+    ctx.closePath();
+
+    //중앙
+    ctx.beginPath()
+    ctx.strokeStyle = digitList[2] ? on : off;
+    ctx.moveTo(x +60 , 65)
+    ctx.lineTo(x +10 , 65)
+    ctx.stroke();
+    ctx.closePath();
+
+    //상단 좌측
+    ctx.beginPath()
+    ctx.strokeStyle = digitList[3] ? on : off;
+    ctx.moveTo(x +10 , 15)
+    ctx.lineTo(x +10, 60)
+    ctx.stroke();
+    ctx.closePath();
+
+    //하단 좌측
+    ctx.beginPath()
+    ctx.strokeStyle = digitList[4] ? on : off;
+    ctx.moveTo(x +10 , 70)
+    ctx.lineTo(x +10, 120)
+    ctx.stroke();
+    ctx.closePath();
+
+    //하단 우측
+    ctx.beginPath()
+    ctx.strokeStyle = digitList[5] ? on : off;
+    ctx.moveTo(x +60 , 70)
+    ctx.lineTo(x +60, 120)
+    ctx.stroke();
+    ctx.closePath();
+
+    //하단
+    ctx.beginPath()
+    ctx.strokeStyle = digitList[6] ? on : off;
+    ctx.moveTo(x +10 , 125)
+    ctx.lineTo(x +60, 125)
+    ctx.stroke();
+    ctx.closePath();
+
+    x -= 70;
+}
 function drawStar(cx, cy, spikes, outerRadius, innerRadius, rotation) {
     var rot = (Math.PI / 2) * 3;
     var x = cx;
     var y = cy;
     var step = Math.PI / spikes;
-
-
-
     ctx.save();
-    ctx.translate(centerX, centerY); // 중심을 (starX, starY)로 이동
+    ctx.translate(centerX, centerY); // 중심을  이동
     ctx.rotate(rotation); // 원하는 각도만큼 회전
+    ctx.scale(sX,sY);
     ctx.beginPath();
     ctx.moveTo(0, -outerRadius);
     for (i = 0; i < spikes; i++) {
@@ -43,42 +122,52 @@ function drawStar(cx, cy, spikes, outerRadius, innerRadius, rotation) {
     ctx.restore();
 }
 function moveStar() {
-    // 별의 새로운 위치 계산
     var newCenterX = centerX + dx;
     var newCenterY = centerY + dy;
 
     // 새로운 위치가 캔버스 경계를 벗어나는지 확인
     if (newCenterX - 20 >= 0 && newCenterX + 20 <= canvas.width && newCenterY - 20 >= 0 && newCenterY + 20 <= canvas.height) {
-        // 새로운 위치가 캔버스 경계 내에 있는 경우에만 위치를 업데이트
         centerX = newCenterX;
         centerY = newCenterY;
     }
 }
 
+canvas.addEventListener('click', (event) => {
+    t=true;
+});
 document.addEventListener('keydown', function(event) {
     switch(event.keyCode) {
         case 37: // 왼쪽 화살표
-            dx = -1;
+        case 65: // 'A' 키
+            dx = -5;
             break;
         case 38: // 위쪽 화살표
-            dy = -1;
+        case 87: // 'W' 키
+            dy = -5;
             break;
         case 39: // 오른쪽 화살표
-            dx = 1;
+        case 68: // 'D' 키
+            dx = 5;
             break;
         case 40: // 아래쪽 화살표
-            dy = 1;
+        case 83: // 'S' 키
+            dy = 5;
             break;
     }
 });
+
 document.addEventListener('keyup', function(event) {
     switch(event.keyCode) {
-        case 37: // 왼쪽 화살표
-        case 39: // 오른쪽 화살표
+        case 37: 
+        case 65: 
+        case 39: 
+        case 68: 
             dx = 0;
             break;
-        case 38: // 위쪽 화살표
-        case 40: // 아래쪽 화살표
+        case 38: 
+        case 87: 
+        case 40: 
+        case 83: 
             dy = 0;
             break;
     }
@@ -104,7 +193,7 @@ class Enmey {
         this.positionX = positionX;
         this.positionY = positionY;
         this.radius = 10; 
-        this.speed = 1;
+        this.speed = 0.5;
     }
     draw(){
         ctx.beginPath();
@@ -116,16 +205,27 @@ class Enmey {
         ctx.fill();
     }
     update() {
+        // 정지할 임계 거리 정의 (원하는 값으로 조정 가능)
+        const thresholdDistance = 200;
+    
         var x = centerX - this.positionX;
         var y = centerY - this.positionY;
-        
+    
         const distance = Math.sqrt(x ** 2 + y ** 2);
-        x /= distance; // 정규화
-        y /= distance; // 정규화
-
-        // 벡터를 이용하여 적의 이동
-        this.positionX += x * this.speed;
-        this.positionY += y * this.speed;
+    
+        if (distance > thresholdDistance) {
+            // 목표까지의 거리가 임계 거리보다 클 때만 방향을 계산하고 업데이트
+            x /= distance; // 정규화
+            y /= distance; // 정규화
+    
+            // 방향 저장 (한번만 계산하여 저장)
+            this.directionX = x;
+            this.directionY = y;
+        }
+    
+        // 벡터를 이용하여 적의 이동 (계산된 방향으로 계속 이동)
+        this.positionX += this.directionX * this.speed;
+        this.positionY += this.directionY * this.speed;
     }
 }
 
@@ -159,10 +259,16 @@ function checkCollision(x1, y1, r1, x2, y2, r2) {
   
     // 두 원이 충돌한 경우
     if (distance < radiusSum) {
-       HP--;
+       if(!t){
+        HP--;
+        }
+        count++
+
+        console.log(count);
        for (let i = 0; i < Enmeys.length; i++) {
         if (Enmeys[i].positionX === x2 && Enmeys[i].positionY === y2) {
             Enmeys.splice(i, 1); // 해당 적 제거
+            
         }
     }
       return true;
@@ -170,38 +276,82 @@ function checkCollision(x1, y1, r1, x2, y2, r2) {
     // 두 원이 충돌하지 않은 경우
     return false;
 }
+function heartCheckCollision(x1, y1, r1, x2, y2, r2) {
+    // 두 원의 중심 간 거리 계산
+    var distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  
+    // 두 원의 반지름 길이 합 계산
+    var radiusSum = r1 + r2;
+  
+    // 두 원이 충돌한 경우
+    if (distance < radiusSum) {
+        heartPositionX = Math.random() * (canvas.width - 6) + 3;
+        heartPositionY = Math.random() * (canvas.height - 6) + 3;
+        hp++;
+        return true;
+    }
+      return false;
+}
 
 function render() {
     a += 0.05;
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
+   
     for (let i = 0; i < Enmeys.length; i++) {
         Enmeys[i].update(); 
         Enmeys[i].draw(); 
-        checkCollision(centerX, centerY, 20, Enmeys[i].positionX, Enmeys[i].positionY, Enmeys[i].radius);
+        checkCollision(centerX, centerY, 20*sX, Enmeys[i].positionX, Enmeys[i].positionY, Enmeys[i].radius);
     }
-
+    if(t){
+        sX+=0.05;
+        sY+=0.05;
+        time+=0.1;
+        if(time >10){
+            sX=1;
+            sY=1;
+            t=false;
+            time=0;
+        }
+    }
+    heartCheckCollision(centerX, centerY,20,heartPositionX,heartPositionY,20);
     drawStar(centerX, centerY, 5, 50, 20, a);
-
     ctx.beginPath();
     for(var i = 0; i <= 360; i++){
-        ctx.lineTo((Math.cos(Math.PI / 180 * i)) * 20 + centerX, (Math.sin(Math.PI / 180 * i)) * 20 + centerY);
+        ctx.lineTo((Math.cos(Math.PI / 180 * i)) * 20*sX + centerX, (Math.sin(Math.PI / 180 * i)) * 20*sY + centerY);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'green'; // 외곽선 색상
+    ctx.lineWidth = 2; // 외곽선 두께 (필요에 따라 조정 가능)
+    ctx.stroke(); // 외곽선을 그립니다
+    
+    drawHeart(heartPositionX, heartPositionY, 3);
+    ctx.beginPath();
+    for(var i = 0; i <= 360; i++){
+        ctx.lineTo((Math.cos(Math.PI / 180 * i)) * 20 + heartPositionX, (Math.sin(Math.PI / 180 * i)) * 20 + heartPositionY);
     }
     ctx.closePath();
     ctx.fillStyle = 'red'; 
     ctx.fill();
-    drawHeart(heartPositionX, heartPositionY, 3);
-
+    checkCollision(centerX, centerY, 20, heartPositionX,heartPositionY, 20);
     if (HP <= 0) {
         endGame();
     } else {
         requestAnimationFrame(render);
     }
     moveStar();
+    x=400;
+
+    var studentIDs = count.toString();
+    for (var i = studentIDs.length - 1; i >= 0; i--) {
+        drawNum(studentIDs[i]);
+    }
+   
 }
 
 function resetGame() {
     HP = 3; 
     Enmeys.length = 0;
+    count =0;
     centerX = canvas.width / 2;
     centerY = canvas.height / 2;
     heartPositionX = Math.random() * (canvas.width - 6) + 3;
