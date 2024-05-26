@@ -287,7 +287,7 @@ function heartCheckCollision(x1, y1, r1, x2, y2, r2) {
     if (distance < radiusSum) {
         heartPositionX = Math.random() * (canvas.width - 6) + 3;
         heartPositionY = Math.random() * (canvas.height - 6) + 3;
-        hp++;
+        HP++;
         return true;
     }
       return false;
