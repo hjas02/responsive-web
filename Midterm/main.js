@@ -122,14 +122,8 @@ function drawStar(cx, cy, spikes, outerRadius, innerRadius, rotation) {
     ctx.restore();
 }
 function moveStar() {
-    var newCenterX = centerX + dx;
-    var newCenterY = centerY + dy;
-
-    // 새로운 위치가 캔버스 경계를 벗어나는지 확인
-    if (newCenterX - 20 >= 0 && newCenterX + 20 <= canvas.width && newCenterY - 20 >= 0 && newCenterY + 20 <= canvas.height) {
-        centerX = newCenterX;
-        centerY = newCenterY;
-    }
+    centerX += dx;
+    centerY += dy;
 }
 
 canvas.addEventListener('click', (event) => {
@@ -296,62 +290,78 @@ function heartCheckCollision(x1, y1, r1, x2, y2, r2) {
 function render() {
     a += 0.05;
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
-   
+    
+    // Adjust canvas position based on star movement
+    var canvasX = canvas.width / 2 - centerX;
+    var canvasY = canvas.height / 2 - centerY;
+    ctx.translate(canvasX, canvasY);
+
     for (let i = 0; i < Enmeys.length; i++) {
         Enmeys[i].update(); 
         Enmeys[i].draw(); 
-        checkCollision(centerX, centerY, 20*sX, Enmeys[i].positionX, Enmeys[i].positionY, Enmeys[i].radius);
+        checkCollision(centerX, centerY, 20 * sX, Enmeys[i].positionX, Enmeys[i].positionY, Enmeys[i].radius);
     }
     if(t){
-        sX+=0.05;
-        sY+=0.05;
-        time+=0.1;
-        if(time >10){
-            sX=1;
-            sY=1;
-            t=false;
-            time=0;
+        sX += 0.05;
+        sY += 0.05;
+        time += 0.1;
+        if(time > 10){
+            sX = 1;
+            sY = 1;
+            t = false;
+            time = 0;
         }
     }
-    heartCheckCollision(centerX, centerY,20,heartPositionX,heartPositionY,20);
-    drawStar(centerX, centerY, 5, 50, 20, a);
+    heartCheckCollision(centerX, centerY, 20, heartPositionX- centerX, heartPositionY- centerY, 20);
+    drawStar(0, 0, 5, 50, 20, a); // Draw star at (0, 0)
+
+    // Draw player position relative to the star
     ctx.beginPath();
     for(var i = 0; i <= 360; i++){
-        ctx.lineTo((Math.cos(Math.PI / 180 * i)) * 20*sX + centerX, (Math.sin(Math.PI / 180 * i)) * 20*sY + centerY);
+        ctx.lineTo((Math.cos(Math.PI / 180 * i)) * 20 * sX + centerX, (Math.sin(Math.PI / 180 * i)) * 20 * sY + centerY);
     }
     ctx.closePath();
-    ctx.strokeStyle = 'green'; // 외곽선 색상
-    ctx.lineWidth = 2; // 외곽선 두께 (필요에 따라 조정 가능)
-    ctx.stroke(); // 외곽선을 그립니다
-    
-    drawHeart(heartPositionX, heartPositionY, 3);
+    ctx.strokeStyle = 'green';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    drawHeart(heartPositionX - centerX, heartPositionY - centerY, 3); // Draw heart relative to the star
+
     ctx.beginPath();
     for(var i = 0; i <= 360; i++){
-        ctx.lineTo((Math.cos(Math.PI / 180 * i)) * 20 + heartPositionX, (Math.sin(Math.PI / 180 * i)) * 20 + heartPositionY);
+        ctx.lineTo((Math.cos(Math.PI / 180 * i)) * 20 + heartPositionX- centerX, (Math.sin(Math.PI / 180 * i)) * 20 + heartPositionY- centerY);
     }
     ctx.closePath();
     ctx.fillStyle = 'red'; 
     ctx.fill();
-    checkCollision(centerX, centerY, 20, heartPositionX,heartPositionY, 20);
+
+    checkCollision(centerX, centerY, 20, heartPositionX, heartPositionY, 20);
     if (HP <= 0) {
         endGame();
     } else {
         requestAnimationFrame(render);
     }
     moveStar();
-    x=400;
+
+    // Reset translation to the original position
+    ctx.translate(-canvasX, -canvasY);
+
+    x = 400;
 
     var studentIDs = count.toString();
     for (var i = studentIDs.length - 1; i >= 0; i--) {
         drawNum(studentIDs[i]);
     }
-   
 }
+
+   
 
 function resetGame() {
     HP = 3; 
     Enmeys.length = 0;
     count =0;
+    dx=0;
+    dy=0;
     centerX = canvas.width / 2;
     centerY = canvas.height / 2;
     heartPositionX = Math.random() * (canvas.width - 6) + 3;
